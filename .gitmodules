@@ -1,0 +1,4 @@
+[submodule "UniGame.Core"]
+	path = UniGame.Core
+	url = https://github.com/UniGameTeam/UniGame.Core.git
+	branch = main
