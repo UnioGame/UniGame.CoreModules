@@ -34,3 +34,7 @@
 	path = UniGame.SceneAssets
 	url = https://github.com/UniGameTeam/UniGame.SceneAssets.git
 	branch = main
+[submodule "UniGame.AddressableImporter"]
+	path = UniGame.AddressableImporter
+	url = https://github.com/UniGameTeam/unity-addressable-importer.git
+	branch = master
