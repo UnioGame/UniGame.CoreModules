@@ -18,3 +18,7 @@
 	path = UniGame.Rx
 	url = https://github.com/UniGameTeam/UniGame.Rx.git
 	branch = main
+[submodule "UniGame.TypeConverters"]
+	path = UniGame.TypeConverters
+	url = https://github.com/UniGameTeam/UniGame.TypeConverters.git
+	branch = main
