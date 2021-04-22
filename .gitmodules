@@ -22,3 +22,7 @@
 	path = UniGame.TypeConverters
 	url = https://github.com/UniGameTeam/UniGame.TypeConverters.git
 	branch = main
+[submodule "UniGame.EditorTools"]
+	path = UniGame.EditorTools
+	url = https://github.com/UniGameTeam/UniGame.EditorTools.git
+	branch = master
