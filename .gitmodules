@@ -30,3 +30,7 @@
 	path = UniGame.AddressableTools
 	url = https://github.com/UniGameTeam/UniGame.AddressableTools.git
 	branch = main
+[submodule "UniGame.SceneAssets"]
+	path = UniGame.SceneAssets
+	url = https://github.com/UniGameTeam/UniGame.SceneAssets.git
+	branch = main
