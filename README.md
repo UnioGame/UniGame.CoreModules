@@ -3,7 +3,7 @@
   - [LifeTime](#lifetime) 
     - [Base API](#lifetime-api)
     - [LifeTime Extensions](#lifetime-extensions)
-    - [LifeTime ScriptableObjects](#lifetime scriptableobjects)
+    - [LifeTime ScriptableObjects](#lifetime-scriptableobjects)
   - [Context](#context)
     - [Game Services](#scene-context)
     - [Context Data Source](#context-data-sources)
