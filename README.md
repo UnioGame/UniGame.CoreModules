@@ -239,6 +239,36 @@ All registered actions, disposables on Terminated LifeTime will execute immediat
 
 Context is Reactive Container of strong typed data
 
+**Base API**
+
+```cs
+
+  public interface IContext
+  {
+        /// <summary>
+        /// Subscribe typed message.
+        /// </summary>
+        IObservable<T> Receive<T>();
+        
+        /// <summary>
+        /// Send Message to all receiver.
+        /// </summary>
+        void Publish<T>(T message);
+        
+        /// Try to remove data of TData type
+        bool Remove<TData>();
+        
+        /// Get registered data by TData Type or return default
+        TData Get<TData>();
+        
+        /// Is Data wuth TData type registered
+        bool Contains<TData>();
+  }
+
+```
+
+
+
 ### Scene Context
 ### Context Data Sources
 ### Game Services
