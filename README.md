@@ -84,7 +84,64 @@ Now install via Package Manager
 
 ## LifeTime
 
+
+Main idea comes from JetBrains LifeTime pattern.
+
+- https://www.jetbrains.com/help/resharper/sdk/Platform/Lifetime.html
+
+Any shared resource/service MUST have single owner.  main rule for fluent resources managment: One resource - One owner
+That rule make make all resource management pretty straightforward and allow to construct hierarchical dependencies.
+
+![](https://github.com/UniGameTeam/UniGame.CoreModules/blob/master/Readme/Assets/lifetime_terminated.png)
+
 ### Base API
+
+```cs
+
+    public interface ILifeTime
+    {
+        /// <summary>
+        /// cleanup action, call when life time terminated
+        /// </summary>
+        ILifeTime AddCleanUpAction(Action cleanAction);
+
+        /// <summary>
+        /// add child disposable object
+        /// </summary>
+        ILifeTime AddDispose(IDisposable item);
+
+        /// <summary>
+        /// save object from GC
+        /// </summary>
+        ILifeTime AddRef(object o);
+
+        /// <summary>
+        /// is lifetime terminated
+        /// </summary>
+        bool IsTerminated { get; }
+    }
+    
+```
+
+#### LifeTime Creation
+
+you can't create instance of LifeTime class directly, but there is easy way to achieve it
+
+```cs
+
+  LifeTimeDefinition lifeTime = new LifeTimeDefinition();
+
+```
+
+```cs
+
+  LifeTime lifeTime = LifeTime.Create();
+
+```
+
+every instance of LifeTime has unique runtime Id.
+
+you must always share only interface **"LifeTime"** where it needed for resources management and never allow direct access to LifeTime instance. That's guarantee that only owner can Terminate your resources
 
 ### LifeTime Extensions
 
