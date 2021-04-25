@@ -85,7 +85,7 @@ Now install via Package Manager
 ## LifeTime
 
 
-Main idea comes from JetBrains LifeTime pattern.
+Main idea based on JetBrains LifeTime pattern.
 
 - https://www.jetbrains.com/help/resharper/sdk/Platform/Lifetime.html
 
