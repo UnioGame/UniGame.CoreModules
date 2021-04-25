@@ -143,6 +143,94 @@ every instance of LifeTime has unique runtime Id.
 
 you must always share only interface **"LifeTime"** where it needed for resources management and never allow direct access to LifeTime instance. That's guarantee that only owner can Terminate your resources
 
+**LifeTime.Terminate()** cleanup all registered IDisposable, Actions, Object in inverted registration order. After that lifeTime.IsTerminated will return TRUE.
+
+```cs
+
+  LifeTime lifeTime = LifeTime.Create();
+  lifeTime.Terminate();
+
+```
+
+All registered actions, disposables on Terminated LifeTime will execute immediately
+
+```cs
+
+  LifeTime lifeTime = LifeTime.Create();
+  lifeTime.Terminate();
+
+```
+
+**LifeTime.Release()** cleanup all registered objects and mark
+
+```cs
+
+  LifeTime lifeTime = LifeTime.Create();
+  lifeTime.Terminate();
+  
+  IDisposable disposable1 = new Disposable1();
+  lifeTime.AddDisposable(disposable1);// Dispose method call immediately
+
+```
+
+#### LifeTime Methods
+
+- IDisposable cleanup
+
+```cs
+
+  public class Foo : IDisposable
+  {
+  
+    private LifeTime lifeTime = LifeTime.Create();
+
+    public Foo(){
+      
+      var disposable1 = new Disposable1().AddTo(lifeTime);
+      var disposable2 = new Disposable2().AddTo(lifeTime);
+      var disposable3 = new Disposable3().AddTo(lifeTime);
+      var disposable4 = new Disposable4();
+      
+      lifeTime.AddDisposable(disposable4);
+      
+    }
+    
+    public void Dispose() => lifeTime.Terminate();
+  
+  }
+  
+```
+
+- Cleanup Action
+
+```cs
+
+  public class Foo : IDisposable
+  {
+  
+    private LifeTime lifeTime = LifeTime.Create();
+
+    public Foo(){
+           
+      lifeTime.AddCleanUpAction(CleanUp1);
+      lifeTime.AddCleanUpAction(() => CleanUp2());
+      
+    }
+    
+    public void Dispose() => lifeTime.Terminate();
+  
+    public void CleanUp1(){
+    
+    }
+    
+    pulic void CleanUp2(){
+    
+    }
+    
+  }
+  
+```
+
 ### LifeTime Extensions
 
 ### LifeTime ScriptableObjects
