@@ -239,7 +239,7 @@ All registered actions, disposables on Terminated LifeTime will execute immediat
 
 Context is Reactive Container of strong typed data
 
-**Base API**
+### Base Context API
 
 ```cs
 
@@ -267,11 +267,17 @@ Context is Reactive Container of strong typed data
 
 ```
 
-
-
 ### Scene Context
+
+Additional API for Content that allow you register data into Scene Scoped Context container
+
 ### Context Data Sources
+
+Async Data Sources of data with registration into target Context
+
 ### Game Services
+
+
 
 ## Editor Tools
 
