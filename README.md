@@ -237,6 +237,8 @@ All registered actions, disposables on Terminated LifeTime will execute immediat
 
 ## Context
 
+Context is Reactive Container of strong typed data
+
 ### Scene Context
 ### Context Data Sources
 ### Game Services
