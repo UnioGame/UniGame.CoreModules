@@ -237,7 +237,7 @@ All registered actions, disposables on Terminated LifeTime will execute immediat
 
 ## Context
 
-Context is Reactive Container of strong typed data
+Context is Reactive Container of strong typed data and Resolving them dynamicaly with support async operations
 
 ### Base Context API
 
@@ -265,6 +265,29 @@ Context is Reactive Container of strong typed data
         bool Contains<TData>();
   }
 
+```
+
+#### Resolve dependencies with Context
+
+```cs
+    public ILifeTime LifeTime { get; }
+
+    public async void Resolve(IContext context)
+    {
+        //async await of value from context with context lifetime
+        var asyncFooValue = await context.ReceiveFirstAsync<IFoo>();
+
+        //async await of value from context with direct lifetime
+        var asyncLifeTimeFooValue = await context.ReceiveFirstAsync<IFoo>(LifeTime);
+
+        //observable value
+        context.Receive<IFoo>()
+            .Subscribe(x => SomeAction(x))
+            .AddTo(LifeTime);
+
+        //sync value acquire
+        var syncValue = context.Get<IFoo>();
+    }
 ```
 
 ### Scene Context
