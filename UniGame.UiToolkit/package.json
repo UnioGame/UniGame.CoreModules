@@ -15,6 +15,7 @@
     "com.unigame.neuecc.unirx": "7.1.1",
     "com.unigame.neuecc.unitask": "2.2.3",
     "com.unigame.unicore": "2021.0.19",
-    "com.unity.addressables": "1.16.7"
+    "com.unity.addressables": "1.16.7",
+    "com.unity.ui": "1.0.0-preview.14"
   }
 }
