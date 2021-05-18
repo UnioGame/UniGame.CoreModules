@@ -300,10 +300,23 @@ Async Data Sources of data with registration into target Context
 
 ### Game Services
 
+## Addressables Tools
+
+Toolset for easy and painless usage of <a href="https://docs.unity3d.com/Packages/com.unity.addressables@latest">Unity Addressables Package</a>  
+
+The main problem of unity package usage is no easy control on assets references lifetime. Where is no way to bind lifetime of references to game state or objects
+Our toolset contains serveral helpful extensions that simplify your workflow
+
+
 
 
 ## Editor Tools
 
 # Api References
+
+- UniRx - Reactive Extensions for Unity (https://github.com/neuecc/UniRx)
+- UniTask - Provides an efficient allocation free async/await integration for Unity (https://github.com/Cysharp/UniTask)
+- ZSting - Zero Allocation StringBuilder for .NET Core and Unity. (https://github.com/Cysharp/ZString)
+- Addressables Importer - A simple rule-based addressable asset importer. The importer marks assets as addressable, by applying to files having a path matching the rule pattern.(https://github.com/favoyang/unity-addressable-importer)
 
 # License
