@@ -305,7 +305,7 @@ The main problem of unity package usage is no easy control on assets references 
 Our toolset contains serveral helpful extensions that simplify your workflow
 
 base extensions methods for Addressable System can be found at 
-<a href "https://github.com/UniGameTeam/UniGame.AddressableTools/blob/main/Runtime/Extensions/AddressableExtensions.cs">AddressableExtensions</a>
+<a href="https://github.com/UniGameTeam/UniGame.AddressableTools/blob/main/Runtime/Extensions/AddressableExtensions.cs">AddressableExtensions</a>
 
 ### Load AssetReference with LifeTime
 
