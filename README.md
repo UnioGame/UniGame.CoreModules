@@ -11,9 +11,6 @@
   - [Addressables Tools](#addressables-tools)
   - [Editor Tools](#editor-tools)
 - [API References](#api-references)
-  - [UniRx](#unirx)
-  - [UniTask](#unitask)
-  - [ZString](#zstring)
 - [License](#license)
 
 # Getting Started
@@ -307,16 +304,126 @@ Toolset for easy and painless usage of <a href="https://docs.unity3d.com/Package
 The main problem of unity package usage is no easy control on assets references lifetime. Where is no way to bind lifetime of references to game state or objects
 Our toolset contains serveral helpful extensions that simplify your workflow
 
+base extensions methods for Addressable System can be found at 
+<a href"https://github.com/UniGameTeam/UniGame.AddressableTools/blob/main/Runtime/Extensions/AddressableExtensions.cs">AddressableExtensions</a>
 
+### Load AssetReference with LifeTime
 
+```cs
 
+  ILifeTime LifeTime = new LifeTimeDefinition();
+
+  private async UniTask LoadReferences()
+  {
+      _goldResource            = await _goldReference.LoadAssetTaskAsync<GameResourceData>(LifeTime);
+      _starsResource           = await _starsReference.LoadAssetTaskAsync<GameResourceData>(LifeTime);
+      _diamondsResource        = await _diamondsReference.LoadAssetTaskAsync<GameResourceData>(LifeTime);
+      _energyResource          = await _energyReference.LoadAssetTaskAsync<GameResourceData>(LifeTime);
+      _boostTimeHintResource   = await _boostTimeHintReference.LoadAssetTaskAsync<GameResourceData>(LifeTime);
+      _highlightHintResource   = await _highlightHintReference.LoadAssetTaskAsync<GameResourceData>(LifeTime);
+      _searchHintResource      = await _searchHintReference.LoadAssetTaskAsync<GameResourceData>(LifeTime);
+      _realMoneyResource       = await _realMoneyReference.LoadAssetTaskAsync<GameResourceData>(LifeTime);
+      _multiSearchHintResource = await _multiSearchHintReference.LoadAssetTaskAsync<GameResourceData>(LifeTime);
+  }
+```
+
+### Load Same Reference
+
+```cs
+
+  LifeTimeDefinition LifeTime1 = new LifeTimeDefinition();
+  LifeTimeDefinition LifeTime2 = new LifeTimeDefinition();
+
+  private async UniTask LoadReferences()
+  {
+      _goldResource1           = await _goldReference.LoadAssetTaskAsync<GameResourceData>(LifeTime1);
+      _goldResource2           = await _goldReference.LoadAssetTaskAsync<GameResourceData>(LifeTime2);
+
+      LifeTime1.Release(); //  _goldReference still valid because of _goldResource2 has active reference and alive lifetime       
+
+      LifeTime2.Release(); // all lifetime's terminated. _goldReference will be unloaded
+  }
+```
+
+### Load Component from AssetReference
+
+```cs
+
+  AssetReference gameObjectReference;
+
+  private async UniTask LoadReferences()
+  {
+      Transform objectTransform = await gameObjectReference.LoadAssetTaskAsync<Transform>(LifeTime);
+  }
+
+```
+
+### Load Interface from AssetReference
+  
+- Let's load some interface of MonoBehaviour from GameObject
+
+```cs
+
+  AssetReference gameObjectReference;
+
+  private async UniTask LoadReferences()
+  {
+      var assetResult = await gameObjectReference.LoadAssetTaskAsync<GameObject,IFoo>(LifeTime);
+      IFoo = assetResult.result;
+  }
+
+```
+  
+```cs
+
+AssetReference gameObjectReference;
+AssetReference soReference;
+
+private async UniTask LoadReferences()
+{
+    IFoo assetResult = await gameObjectReference.LoadAssetTaskApiAsync<GameObject,IFoo>(LifeTime);
+    
+    ISomeScriptableObject assetResult = await soReference.LoadAssetTaskApiAsync<ScriptableObject,ISomeScriptableObject>(LifeTime);
+}
+
+```
+  
+or you can use GameObjectAssetReference
+  
+```cs
+
+AssetReferenceGameObject gameObjectReference;
+
+private async UniTask LoadReferences()
+{
+    IFoo assetResult = await gameObjectReference.LoadAssetTaskAsync<IFoo>(LifeTime);
+}
+  
+```
+
+### Load Collections of References
+  
+```cs
+private readonly IReadOnlyList<AssetReference> resources;
+private readonly List<IFoo> sources = new List<IFoo>();
+
+public async UniTask<IReadOnlyList<SomeScriptableObject>> Execute(ILifeTime lifeTime)
+{
+    return await resources.LoadAssetsTaskAsync<ScriptableObject, IFoo, AssetReference>(sources,lifeTime);
+}
+  
+```
+  
+  
 ## Editor Tools
 
 # Api References
 
-- UniRx - Reactive Extensions for Unity (https://github.com/neuecc/UniRx)
-- UniTask - Provides an efficient allocation free async/await integration for Unity (https://github.com/Cysharp/UniTask)
-- ZSting - Zero Allocation StringBuilder for .NET Core and Unity. (https://github.com/Cysharp/ZString)
-- Addressables Importer - A simple rule-based addressable asset importer. The importer marks assets as addressable, by applying to files having a path matching the rule pattern.(https://github.com/favoyang/unity-addressable-importer)
+- <a href="https://github.com/neuecc/UniRx">UniRx</a> - Reactive Extensions for Unity
+- <a href="https://github.com/Cysharp/UniTask">UniTask</a> - Provides an efficient allocation free async/await integration for Unity 
+- <a href="https://github.com/Cysharp/ZString">ZSting</a> - Zero Allocation StringBuilder for .NET Core and Unity. 
+- <a href="https://github.com/favoyang/unity-addressable-importer">Addressables Importer</a> - A simple rule-based addressable asset importer. The importer marks assets as addressable, by applying to files having a path matching the rule pattern.
 
 # License
+
+MIT
