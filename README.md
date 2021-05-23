@@ -9,6 +9,8 @@
     - [Context Data Source](#context-data-sources)
     - [Game Services](#game-services)
   - [Addressables Tools](#addressables-tools)
+    - [How to Load](#how-to-load)
+    - [Sprite Atlases with Adressables](#addressables-sprite-atlases)  
   - [Editor Tools](#editor-tools)
 - [API References](#api-references)
 - [License](#license)
@@ -307,6 +309,9 @@ Our toolset contains serveral helpful extensions that simplify your workflow
 base extensions methods for Addressable System can be found at 
 <a href="https://github.com/UniGameTeam/UniGame.AddressableTools/blob/main/Runtime/Extensions/AddressableExtensions.cs">AddressableExtensions</a>
 
+
+### How to Load
+
 ### Load AssetReference with LifeTime
 
 ```cs
@@ -413,8 +418,26 @@ public async UniTask<IReadOnlyList<SomeScriptableObject>> Execute(ILifeTime life
 }
   
 ```
+### Addressables Sprite Atlases 
   
+First of all. Create Sprite Atlas configuration asset
   
+![](https://github.com/UniGameTeam/UniGame.CoreModules/blob/master/GitAssets/sprite-atlas-config.png)
+
+Create -> UniGame -> Addressables -> SpriteAtlasConfiguration
+  
+- create sprite atlas
+- mark atlas as addressables
+- disable "include in build"
+
+![](https://github.com/UniGameTeam/UniGame.CoreModules/blob/master/GitAssets/atlas_settings.png)
+
+- apply atlas reimport
+
+![](https://github.com/UniGameTeam/UniGame.CoreModules/blob/master/GitAssets/reimport-atlases.png)
+
+Now if you will be use sprite reference by direct link from any addressables prefab all spirce shown correctly
+
 ## Editor Tools
 
 # Api References
