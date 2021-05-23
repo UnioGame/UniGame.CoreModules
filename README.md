@@ -422,7 +422,7 @@ public async UniTask<IReadOnlyList<SomeScriptableObject>> Execute(ILifeTime life
   
 First of all. Create Sprite Atlas configuration asset
   
-![](https://github.com/UniGameTeam/UniGame.CoreModules/blob/master/GitAssets/sprite-atlas-config.png)
+![](https://github.com/UniGameTeam/UniGame.CoreModules/blob/main/GitAseets/sprite-atlas-config.png)
 
 Create -> UniGame -> Addressables -> SpriteAtlasConfiguration
   
@@ -430,11 +430,11 @@ Create -> UniGame -> Addressables -> SpriteAtlasConfiguration
 - mark atlas as addressables
 - disable "include in build"
 
-![](https://github.com/UniGameTeam/UniGame.CoreModules/blob/master/GitAssets/atlas_settings.png)
+![](https://github.com/UniGameTeam/UniGame.CoreModules/blob/main/GitAseets/atlas_settings.png)
 
 - apply atlas reimport
 
-![](https://github.com/UniGameTeam/UniGame.CoreModules/blob/master/GitAssets/reimport-atlases.png)
+![](https://github.com/UniGameTeam/UniGame.CoreModules/blob/main/GitAseets/reimport-atlases.png)
 
 Now if you will be use sprite reference by direct link from any addressables prefab all spirce shown correctly
 
