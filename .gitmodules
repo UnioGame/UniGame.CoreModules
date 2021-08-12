@@ -42,3 +42,6 @@
 	path = UniGame.Core
 	url = https://github.com/UniGameTeam/UniGame.Core.git
 	branch = main
+[submodule "UniGame.AssetDependenciesViewer"]
+	path = UniGame.AssetDependenciesViewer
+	url = ../UniGame.AssetDependenciesViewer.git
