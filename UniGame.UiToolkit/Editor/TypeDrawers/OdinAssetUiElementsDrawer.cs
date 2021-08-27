@@ -2,7 +2,7 @@
 {
     using System;
     using Runtime.Attributes.FieldTypeDrawer;
-    using UniModules.UniGame.Core.EditorTools.Editor.DrawersTools;
+    using UniModules.UniGame.Editor.DrawersTools;
     using UnityEngine;
     using UnityEngine.UIElements;
     using Object = UnityEngine.Object;
