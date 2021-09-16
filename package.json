@@ -4,7 +4,7 @@
   "displayName": "UniGame Core Modules Collection",
   "description": "",
   "unity": "2019.2",
-  "version": "2021.5.11",
+  "version": "2021.6.0",
   "keywords": [
     "editor",
     "codogen",
@@ -18,7 +18,7 @@
     "url": "https://github.com/UniGameTeam/CoreModules.git"
   },
   "dependencies": {
-    "com.unity.addressables": "1.17.17",
+    "com.unity.addressables": "1.18.15",
     "com.unity.textmeshpro": "2.1.6",
     "com.unity.ugui": "1.0.0",
     "com.unity.editorcoroutines": "1.0.0",
