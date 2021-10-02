@@ -149,8 +149,9 @@ namespace UniRx
             var node = root;
             while (node != null)
             {
+                var nodeBuffer = node;
                 node.OnNext(value);
-                node = node.Next;
+                node = nodeBuffer;
             }
         }
 
