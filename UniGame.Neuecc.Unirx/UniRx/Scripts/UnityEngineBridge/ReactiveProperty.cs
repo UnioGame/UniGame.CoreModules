@@ -149,7 +149,7 @@ namespace UniRx
             var node = root;
             while (node != null)
             {
-                var nodeBuffer = node;
+                var nodeBuffer = node.Next;
                 node.OnNext(value);
                 node = nodeBuffer;
             }
@@ -232,8 +232,9 @@ namespace UniRx
 
             while (node != null)
             {
+                var nextNode = node.Next;
                 node.OnCompleted();
-                node = node.Next;
+                node = nextNode;
             }
         }
 
@@ -435,8 +436,9 @@ namespace UniRx
             var node = root;
             while (node != null)
             {
+                var nextNode = node.Next;
                 node.OnNext(value);
-                node = node.Next;
+                node = nextNode;
             }
         }
 
