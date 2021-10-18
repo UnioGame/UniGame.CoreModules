@@ -10,6 +10,10 @@ using System.Threading;
 using UniRx.InternalUtil;
 using UnityEngine;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 namespace UniRx
 {
     public sealed class MainThreadDispatcher : MonoBehaviour
@@ -214,6 +218,30 @@ namespace UniRx
 
 #endif
 
+        
+#if UNITY_EDITOR
+
+        [RuntimeInitializeOnLoadMethod]
+        public static void InitializeForPlaymode()
+        {
+            void OnPlaymodeChanged(PlayModeStateChange state)
+            {
+                switch (state)
+                {
+                    case PlayModeStateChange.EnteredEditMode:
+                    case PlayModeStateChange.ExitingPlayMode:
+                        instance = null;
+                        break;
+                }
+            }
+
+            UnityEditor.EditorApplication.playModeStateChanged -= OnPlaymodeChanged;
+            UnityEditor.EditorApplication.playModeStateChanged += OnPlaymodeChanged;
+            
+        }        
+        
+#endif
+        
         /// <summary>Dispatch Asyncrhonous action.</summary>
         public static void Post(Action<object> action, object state)
         {
