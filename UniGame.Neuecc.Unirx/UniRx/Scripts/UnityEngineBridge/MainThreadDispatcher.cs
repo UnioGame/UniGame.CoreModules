@@ -231,6 +231,7 @@ namespace UniRx
                     case PlayModeStateChange.EnteredEditMode:
                     case PlayModeStateChange.ExitingPlayMode:
                         instance = null;
+                        initialized = false;
                         break;
                 }
             }
@@ -467,52 +468,45 @@ namespace UniRx
 
         public static void Initialize()
         {
-            if (!initialized)
-            {
+            if (initialized) return;
+            
 #if UNITY_EDITOR
-                // Don't try to add a GameObject when the scene is not playing. Only valid in the Editor, EditorView.
-                if (!ScenePlaybackDetector.IsPlaying) return;
+            // Don't try to add a GameObject when the scene is not playing. Only valid in the Editor, EditorView.
+            if (!ScenePlaybackDetector.IsPlaying) return;
 #endif
-                MainThreadDispatcher dispatcher = null;
+            MainThreadDispatcher dispatcher = null;
 
-                try
-                {
-                    dispatcher = GameObject.FindObjectOfType<MainThreadDispatcher>();
-                }
-                catch
-                {
-                    // Throw exception when calling from a worker thread.
-                    var ex = new Exception("UniRx requires a MainThreadDispatcher component created on the main thread. Make sure it is added to the scene before calling UniRx from a worker thread.");
-                    UnityEngine.Debug.LogException(ex);
-                    throw ex;
-                }
-
-                if (isQuitting)
-                {
-                    // don't create new instance after quitting
-                    // avoid "Some objects were not cleaned up when closing the scene find target" error.
-                    return;
-                }
-
-                if (dispatcher == null)
-                {
-                    // awake call immediately from UnityEngine
-                    new GameObject("MainThreadDispatcher").AddComponent<MainThreadDispatcher>();
-                }
-                else
-                {
-                    dispatcher.Awake(); // force awake
-                }
-            }
-        }
-
-        public static bool IsInMainThread
-        {
-            get
+            try
             {
-                return (mainThreadToken != null);
+                dispatcher = GameObject.FindObjectOfType<MainThreadDispatcher>();
+            }
+            catch
+            {
+                // Throw exception when calling from a worker thread.
+                var ex = new Exception("UniRx requires a MainThreadDispatcher component created on the main thread. Make sure it is added to the scene before calling UniRx from a worker thread.");
+                UnityEngine.Debug.LogException(ex);
+                throw ex;
+            }
+
+            if (isQuitting)
+            {
+                // don't create new instance after quitting
+                // avoid "Some objects were not cleaned up when closing the scene find target" error.
+                return;
+            }
+
+            if (dispatcher == null)
+            {
+                // awake call immediately from UnityEngine
+                new GameObject("MainThreadDispatcher").AddComponent<MainThreadDispatcher>();
+            }
+            else
+            {
+                dispatcher.Awake(); // force awake
             }
         }
+
+        public static bool IsInMainThread => (mainThreadToken != null);
 
         void Awake()
         {
@@ -534,23 +528,22 @@ namespace UniRx
             }
             else
             {
-                if (this != instance)
+                if (this == instance) return;
+
+                switch (cullingMode)
                 {
-                    if (cullingMode == CullingMode.Self)
-                    {
+                    case CullingMode.Self:
                         // Try to destroy this dispatcher if there's already one in the scene.
                         Debug.LogWarning("There is already a MainThreadDispatcher in the scene. Removing myself...");
                         DestroyDispatcher(this);
-                    }
-                    else if (cullingMode == CullingMode.All)
-                    {
+                        break;
+                    case CullingMode.All:
                         Debug.LogWarning("There is already a MainThreadDispatcher in the scene. Cleaning up all excess dispatchers...");
                         CullAllExcessDispatchers();
-                    }
-                    else
-                    {
+                        break;
+                    default:
                         Debug.LogWarning("There is already a MainThreadDispatcher in the scene.");
-                    }
+                        break;
                 }
             }
         }
@@ -584,22 +577,21 @@ namespace UniRx
 
         static void DestroyDispatcher(MainThreadDispatcher aDispatcher)
         {
-            if (aDispatcher != instance)
+            if (aDispatcher == instance) return;
+            
+            // Try to remove game object if it's empty
+            var components = aDispatcher.gameObject.GetComponents<Component>();
+            if (aDispatcher.gameObject.transform.childCount == 0 && components.Length == 2)
             {
-                // Try to remove game object if it's empty
-                var components = aDispatcher.gameObject.GetComponents<Component>();
-                if (aDispatcher.gameObject.transform.childCount == 0 && components.Length == 2)
+                if (components[0] is Transform && components[1] is MainThreadDispatcher)
                 {
-                    if (components[0] is Transform && components[1] is MainThreadDispatcher)
-                    {
-                        Destroy(aDispatcher.gameObject);
-                    }
+                    Destroy(aDispatcher.gameObject);
                 }
-                else
-                {
-                    // Remove component
-                    MonoBehaviour.Destroy(aDispatcher);
-                }
+            }
+            else
+            {
+                // Remove component
+                MonoBehaviour.Destroy(aDispatcher);
             }
         }
 
@@ -614,12 +606,12 @@ namespace UniRx
 
         void OnDestroy()
         {
-            if (instance == this)
-            {
-                instance = GameObject.FindObjectOfType<MainThreadDispatcher>();
-                initialized = instance != null;
+            if (instance != this) return;
+            
+            instance = GameObject.FindObjectOfType<MainThreadDispatcher>();
+            initialized = instance != null;
 
-                /*
+            /*
                 // Although `this` still refers to a gameObject, it won't be found.
                 var foundDispatcher = GameObject.FindObjectOfType<MainThreadDispatcher>();
 
@@ -631,7 +623,6 @@ namespace UniRx
                     initialized = true;
                 }
                 */
-            }
         }
 
         void Update()
