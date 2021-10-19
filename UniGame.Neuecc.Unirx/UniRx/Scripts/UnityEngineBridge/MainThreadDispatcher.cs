@@ -692,6 +692,7 @@ namespace UniRx
         {
             isQuitting = true;
             if (onApplicationQuit != null) onApplicationQuit.OnNext(Unit.Default);
+            instance = null;
         }
 
         public static IObservable<Unit> OnApplicationQuitAsObservable()
