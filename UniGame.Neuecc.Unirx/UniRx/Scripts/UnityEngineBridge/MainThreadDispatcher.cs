@@ -232,12 +232,13 @@ namespace UniRx
                     case PlayModeStateChange.ExitingPlayMode:
                         instance = null;
                         initialized = false;
+                        isQuitting = false;
                         break;
                 }
             }
 
-            UnityEditor.EditorApplication.playModeStateChanged -= OnPlaymodeChanged;
-            UnityEditor.EditorApplication.playModeStateChanged += OnPlaymodeChanged;
+            EditorApplication.playModeStateChanged -= OnPlaymodeChanged;
+            EditorApplication.playModeStateChanged += OnPlaymodeChanged;
             
         }        
         
@@ -248,14 +249,10 @@ namespace UniRx
         {
 #if UNITY_EDITOR
             if (!ScenePlaybackDetector.IsPlaying) { EditorThreadDispatcher.Instance.Enqueue(action, state); return; }
-
 #endif
-
             var dispatcher = Instance;
-            if (!isQuitting && !object.ReferenceEquals(dispatcher, null))
-            {
+            if (!isQuitting && !ReferenceEquals(dispatcher, null))
                 dispatcher.queueWorker.Enqueue(action, state);
-            }
         }
 
         /// <summary>Dispatch Synchronous action if possible.</summary>
@@ -299,7 +296,7 @@ namespace UniRx
             }
             catch (Exception ex)
             {
-                var dispatcher = MainThreadDispatcher.Instance;
+                var dispatcher = Instance;
                 if (dispatcher != null)
                 {
                     dispatcher.unhandledExceptionCallback(ex);
@@ -320,7 +317,7 @@ namespace UniRx
             }
             catch (Exception ex)
             {
-                var dispatcher = MainThreadDispatcher.Instance;
+                var dispatcher = Instance;
                 if (dispatcher != null)
                 {
                     dispatcher.unhandledExceptionCallback(ex);
@@ -401,16 +398,9 @@ namespace UniRx
 #if UNITY_EDITOR
             if (!ScenePlaybackDetector.IsPlaying) { EditorThreadDispatcher.Instance.PseudoStartCoroutine(routine); return null; }
 #endif
-
             var dispatcher = Instance;
-            if (dispatcher != null)
-            {
-                return (dispatcher as MonoBehaviour).StartCoroutine(routine);
-            }
-            else
-            {
-                return null;
-            }
+            return dispatcher != null 
+                ? (dispatcher as MonoBehaviour).StartCoroutine(routine) : null;
         }
 
         public static void RegisterUnhandledExceptionCallback(Action<Exception> exceptionCallback)
@@ -472,7 +462,7 @@ namespace UniRx
             
 #if UNITY_EDITOR
             // Don't try to add a GameObject when the scene is not playing. Only valid in the Editor, EditorView.
-            if (!ScenePlaybackDetector.IsPlaying) return;
+            if (!EditorApplication.isPlaying) return;
 #endif
             MainThreadDispatcher dispatcher = null;
 
