@@ -54,12 +54,7 @@ namespace UniRx
                     // Activate EditorThreadDispatcher is dangerous, completely Lazy.
                     lock (gate)
                     {
-                        if (instance == null)
-                        {
-                            instance = new EditorThreadDispatcher();
-                        }
-
-                        return instance;
+                        return instance ??= new EditorThreadDispatcher();
                     }
                 }
             }
