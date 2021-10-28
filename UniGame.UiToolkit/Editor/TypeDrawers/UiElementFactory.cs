@@ -17,7 +17,6 @@
     using UnityEngine.UIElements;
     using Object = UnityEngine.Object;
 
-    [InitializeOnLoad]
     public static class UiElementFactory 
     {
         private static List<Attribute>              _attributes = new List<Attribute>();
