@@ -97,18 +97,18 @@ namespace Cysharp.Text
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Dispose()
         {
-            if (buffer != null)
+            if (buffer.Length != ThreadStaticBufferSize)
             {
-                if (buffer.Length != ThreadStaticBufferSize)
+                if (buffer != null)
                 {
                     ArrayPool<char>.Shared.Return(buffer);
                 }
-                buffer = null;
-                index = 0;
-                if (disposeImmediately)
-                {
-                    scratchBufferUsed = false;
-                }
+            }
+            buffer = null;
+            index = 0;
+            if (disposeImmediately)
+            {
+                scratchBufferUsed = false;
             }
         }
 
@@ -200,16 +200,7 @@ namespace Cysharp.Text
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Append(string value)
         {
-#if UNITY_2018_3_OR_NEWER || NETSTANDARD2_0
-            if (buffer.Length - index < value.Length)
-            {
-                Grow(value.Length);
-            }
-            value.CopyTo(0, buffer, index, value.Length);
-            index += value.Length;
-#else
             Append(value.AsSpan());
-#endif
         }
 
         /// <summary>Appends the string representation of a specified value followed by the default line terminator to the end of this instance.</summary>
@@ -218,44 +209,6 @@ namespace Cysharp.Text
         {
             Append(value);
             AppendLine();
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Append(string value, int startIndex, int count)
-        {
-            if (value == null)
-            {
-                if (startIndex == 0 && count == 0)
-                {
-                    return;
-                }
-                else
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
-            }
-
-#if UNITY_2018_3_OR_NEWER || NETSTANDARD2_0
-            if (buffer.Length - index < count)
-            {
-                Grow(count);
-            }
-            value.CopyTo(startIndex, buffer, index, count);
-            index += count;
-#else
-            Append(value.AsSpan(startIndex, count));
-#endif
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Append(char[] value, int startIndex, int charCount)
-        {
-            if (buffer.Length - index < charCount)
-            {
-                Grow(charCount);
-            }
-            Array.Copy(value, startIndex, buffer, index, charCount);
-            index += charCount;
         }
 
         /// <summary>Appends a contiguous region of arbitrary memory to this instance.</summary>
@@ -416,7 +369,7 @@ namespace Cysharp.Text
         /// are removed from this builder.
         /// </remarks>
         public void Replace(string oldValue, string newValue) => Replace(oldValue, newValue, 0, Length);
-
+        
         public void Replace(ReadOnlySpan<char> oldValue, ReadOnlySpan<char> newValue) => Replace(oldValue, newValue, 0, Length);
 
         /// <summary>
@@ -506,22 +459,6 @@ namespace Cysharp.Text
             }
             buffer = newBuffer;
             index = newBufferIndex;
-        }
-        
-        /// <summary>
-        /// Replaces the contents of a single position within the builder.
-        /// </summary>
-        /// <param name="newChar">The character to use at the position.</param>
-        /// <param name="replaceIndex">The index to replace.</param>
-        public void ReplaceAt(char newChar, int replaceIndex)
-        {
-            int currentLength = Length;
-            if ((uint)replaceIndex > (uint)currentLength)
-            {
-                ExceptionUtil.ThrowArgumentOutOfRangeException(nameof(replaceIndex));
-            }
-            
-            buffer[replaceIndex] = newChar;
         }
 
         /// <summary>
@@ -632,6 +569,10 @@ namespace Cysharp.Text
         {
             throw new FormatException("Index (zero based) must be greater than or equal to zero and less than the size of the argument list.");
         }
+        private static void FormatError()
+        {
+            throw new FormatException("Input string was not in a correct format.");
+        }
 
         void AppendFormatInternal<T>(T arg, int width, ReadOnlySpan<char> format, string argName)
         {
@@ -696,6 +637,19 @@ namespace Cysharp.Text
         static void ThrowNestedException()
         {
             throw new NestedStringBuilderCreationException(nameof(Utf16ValueStringBuilder));
+        }
+
+        void AppendFormatInternal<T>(T arg1, ReadOnlySpan<char> format, string argName)
+        {
+            if (!FormatterCache<T>.TryFormatDelegate(arg1, buffer.AsSpan(index), out var written, format))
+            {
+                Grow(written);
+                if (!FormatterCache<T>.TryFormatDelegate(arg1, buffer.AsSpan(index), out written, format))
+                {
+                    ThrowArgumentException(argName);
+                }
+            }
+            index += written;
         }
 
         /// <summary>
