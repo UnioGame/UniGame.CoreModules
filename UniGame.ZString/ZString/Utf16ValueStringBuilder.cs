@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Buffers;
-using System.IO;
 using System.Runtime.CompilerServices;
 
 namespace Cysharp.Text
 {
-    public partial struct Utf16ValueStringBuilder : IDisposable, IBufferWriter<char>, IResettableBufferWriter<char>
+    public partial struct Utf16ValueStringBuilder : IDisposable, IBufferWriter<char>
     {
         public delegate bool TryFormat<T>(T value, Span<char> destination, out int charsWritten, ReadOnlySpan<char> format);
 
@@ -87,16 +86,15 @@ namespace Cysharp.Text
             index = 0;
         }
 
-        public void TryGrow(int sizeHint)
+        void TryGrow(int sizeHint)
         {
-
             if (buffer.Length < index + sizeHint)
             {
                 Grow(sizeHint);
             }
         }
 
-        public void Grow(int sizeHint)
+        void Grow(int sizeHint = 0)
         {
             var nextSize = buffer.Length * 2;
             if (sizeHint != 0)
@@ -158,19 +156,12 @@ namespace Cysharp.Text
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Append(string value)
         {
-            Append(value.AsSpan());
-        }
-
-        /// <summary>Appends a contiguous region of arbitrary memory to this instance.</summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Append(ReadOnlySpan<char> value)
-        {
             if (buffer.Length - index < value.Length)
             {
                 Grow(value.Length);
             }
 
-            value.CopyTo(buffer.AsSpan(index));
+            value.CopyTo(0, buffer, index, value.Length);
             index += value.Length;
         }
 
@@ -187,7 +178,7 @@ namespace Cysharp.Text
         {
             if (!FormatterCache<T>.TryFormatDelegate(value, buffer.AsSpan(index), out var written, default))
             {
-                Grow(written);
+                Grow();
                 if (!FormatterCache<T>.TryFormatDelegate(value, buffer.AsSpan(index), out written, default))
                 {
                     ThrowArgumentException(nameof(value));
@@ -253,11 +244,6 @@ namespace Cysharp.Text
         public void Advance(int count)
         {
             index += count;
-        }
-
-        void IResettableBufferWriter<char>.Reset()
-        {
-            index = 0;
         }
 
         void ThrowArgumentException(string paramName)
