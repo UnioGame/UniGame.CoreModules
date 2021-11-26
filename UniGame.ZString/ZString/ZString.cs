@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -10,14 +9,6 @@ namespace Cysharp.Text
     public static partial class ZString
     {
         static Encoding UTF8NoBom = new UTF8Encoding(false);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static void AppendChars<TBufferWriter>(ref TBufferWriter sb, ReadOnlySpan<char> chars)
-            where TBufferWriter : System.Buffers.IBufferWriter<byte>
-        {
-            var span = sb.GetSpan(UTF8NoBom.GetMaxByteCount(chars.Length));
-            sb.Advance(UTF8NoBom.GetBytes(chars, span));
-        }
 
         /// <summary>Create the Utf16 string StringBuilder.</summary>
         public static Utf16ValueStringBuilder CreateStringBuilder()
@@ -32,26 +23,12 @@ namespace Cysharp.Text
         }
 
         /// <summary>Create the Utf8(`Span[byte]`) StringBuilder.</summary>
-        /// <param name="notNested">
-        /// If true uses thread-static buffer that is faster but must return immediately.
-        /// </param>
-        /// <exception cref="InvalidOperationException">
-        /// This exception is thrown when <c>new StringBuilder(disposeImmediately: true)</c> or <c>ZString.CreateUtf8StringBuilder(notNested: true)</c> is nested.
-        /// See the README.md
-        /// </exception>
         public static Utf16ValueStringBuilder CreateStringBuilder(bool notNested)
         {
             return new Utf16ValueStringBuilder(notNested);
         }
 
         /// <summary>Create the Utf8(`Span[byte]`) StringBuilder, when true uses thread-static buffer that is faster but must return immediately.</summary>
-        /// <param name="notNested">
-        /// If true uses thread-static buffer that is faster but must return immediately.
-        /// </param>
-        /// <exception cref="InvalidOperationException">
-        /// This exception is thrown when <c>new StringBuilder(disposeImmediately: true)</c> or <c>ZString.CreateUtf8StringBuilder(notNested: true)</c> is nested.
-        /// See the README.md
-        /// </exception>
         public static Utf8ValueStringBuilder CreateUtf8StringBuilder(bool notNested)
         {
             return new Utf8ValueStringBuilder(notNested);
@@ -67,8 +44,7 @@ namespace Cysharp.Text
         /// <summary>Concatenates the elements of an array, using the specified seperator between each element.</summary>
         public static string Join<T>(char separator, List<T> values)
         {
-            ReadOnlySpan<char> s = stackalloc char[1] { separator };
-            return JoinInternal(s, (IReadOnlyList<T>)values);
+            return Join(separator, (IList<T>)values);
         }
 
         /// <summary>Concatenates the elements of an array, using the specified seperator between each element.</summary>
@@ -87,8 +63,7 @@ namespace Cysharp.Text
 
         public static string Join<T>(char separator, ICollection<T> values)
         {
-            ReadOnlySpan<char> s = stackalloc char[1] { separator };
-            return JoinInternal(s, values.AsEnumerable());
+            return Join(separator, values.AsEnumerable());
         }
 
         public static string Join<T>(char separator, IList<T> values)
@@ -99,14 +74,12 @@ namespace Cysharp.Text
 
         public static string Join<T>(char separator, IReadOnlyList<T> values)
         {
-            ReadOnlySpan<char> s = stackalloc char[1] { separator };
-            return JoinInternal(s, values);
+            return Join(separator, values.AsEnumerable());
         }
 
         public static string Join<T>(char separator, IReadOnlyCollection<T> values)
         {
-            ReadOnlySpan<char> s = stackalloc char[1] { separator };
-            return JoinInternal(s, values.AsEnumerable());
+            return Join(separator, values.AsEnumerable());
         }
 
         /// <summary>Concatenates the elements of an array, using the specified seperator between each element.</summary>
@@ -118,7 +91,7 @@ namespace Cysharp.Text
         /// <summary>Concatenates the elements of an array, using the specified seperator between each element.</summary>
         public static string Join<T>(string separator, List<T> values)
         {
-            return JoinInternal(separator.AsSpan(), (IReadOnlyList<T>)values);
+            return JoinInternal(separator.AsSpan(), values);
         }
         
         /// <summary>Concatenates the elements of an array, using the specified seperator between each element.</summary>
@@ -139,7 +112,7 @@ namespace Cysharp.Text
 
         public static string Join<T>(string separator, IReadOnlyList<T> values)
         {
-            return JoinInternal(separator.AsSpan(), values);
+            return JoinInternal(separator.AsSpan(), values.AsEnumerable());
         }
 
         public static string Join<T>(string separator, IReadOnlyCollection<T> values)
@@ -153,63 +126,7 @@ namespace Cysharp.Text
             return JoinInternal(separator.AsSpan(), values);
         }
 
-        /// <summary>Concatenates the string representation of some specified objects.</summary>
-        public static string Concat<T>(params T[] values)
-        {
-            return JoinInternal<T>(default, values.AsSpan());
-        }
-
-        /// <summary>Concatenates the string representation of some specified objects.</summary>
-        public static string Concat<T>(List<T> values)
-        {
-            return JoinInternal(default, (IReadOnlyList<T>)values);
-        }
-
-        /// <summary>Concatenates the string representation of some specified objects.</summary>
-        public static string Concat<T>(ReadOnlySpan<T> values)
-        {
-            return JoinInternal(default, values);
-        }
-
-        /// <summary>Concatenates the string representation of some specified objects.</summary>
-        public static string Concat<T>(ICollection<T> values)
-        {
-            return JoinInternal(default, values.AsEnumerable());
-        }
-
-        /// <summary>Concatenates the string representation of some specified objects.</summary>
-        public static string Concat<T>(IList<T> values)
-        {
-            return JoinInternal(default, values);
-        }
-
-        /// <summary>Concatenates the string representation of some specified objects.</summary>
-        public static string Concat<T>(IReadOnlyList<T> values)
-        {
-            return JoinInternal(default, values);
-        }
-
-        /// <summary>Concatenates the string representation of some specified objects.</summary>
-        public static string Concat<T>(IReadOnlyCollection<T> values)
-        {
-            return JoinInternal(default, values.AsEnumerable());
-        }
-
-        /// <summary>Concatenates the string representation of some specified objects.</summary>
-        public static string Concat<T>(IEnumerable<T> values)
-        {
-            return JoinInternal(default, values);
-        }
-
         static string JoinInternal<T>(ReadOnlySpan<char> separator, IList<T> values)
-        {
-            var readOnlyList = values as IReadOnlyList<T>;
-            // Boxing will occur, but JIT will be de-virtualized.
-            readOnlyList = readOnlyList ?? new ReadOnlyListAdaptor<T>(values);
-            return JoinInternal(separator, readOnlyList);
-        }
-
-        static string JoinInternal<T>(ReadOnlySpan<char> separator, IReadOnlyList<T> values)
         {
             var count = values.Count;
             if (count == 0)
@@ -224,7 +141,27 @@ namespace Cysharp.Text
             var sb = new Utf16ValueStringBuilder(true);
             try
             {
-                sb.AppendJoinInternal(separator, values);
+                for (int i = 0; i < count; i++)
+                {
+                    if (i != 0)
+                    {
+                        sb.Append(separator);
+                    }
+
+                    var item = values[i];
+                    if (typeof(T) == typeof(string))
+                    {
+                        var s = Unsafe.As<string>(item);
+                        if (!string.IsNullOrEmpty(s))
+                        {
+                            sb.Append(s);
+                        }
+                    }
+                    else
+                    {
+                        sb.Append(item);
+                    }
+                }
                 return sb.ToString();
             }
             finally
@@ -247,7 +184,27 @@ namespace Cysharp.Text
             var sb = new Utf16ValueStringBuilder(true);
             try
             {
-                sb.AppendJoinInternal(separator, values);
+                for (int i = 0; i < values.Length; i++)
+                {
+                    if (i != 0)
+                    {
+                        sb.Append(separator);
+                    }
+
+                    var item = values[i];
+                    if (typeof(T) == typeof(string))
+                    {
+                        var s = Unsafe.As<string>(item);
+                        if (!string.IsNullOrEmpty(s))
+                        {
+                            sb.Append(s);
+                        }
+                    }
+                    else
+                    {
+                        sb.Append(item);
+                    }
+                }
                 return sb.ToString();
             }
             finally
@@ -261,7 +218,32 @@ namespace Cysharp.Text
             var sb = new Utf16ValueStringBuilder(true);
             try
             {
-                sb.AppendJoinInternal(separator, values);
+                var isFirst = true;
+                foreach (var item in values)
+                {
+                    if (!isFirst)
+                    {
+                        sb.Append(separator);
+                    }
+                    else
+                    {
+                        isFirst = false;
+                    }
+
+                    if (typeof(T) == typeof(string))
+                    {
+                        var s = Unsafe.As<string>(item);
+                        if (!string.IsNullOrEmpty(s))
+                        {
+                            sb.Append(s);
+                        }
+                    }
+                    else
+                    {
+                        sb.Append(item);
+                    }
+                }
+
                 return sb.ToString();
             }
             finally
