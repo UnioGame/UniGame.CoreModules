@@ -45,3 +45,6 @@
 [submodule "UniGame.AssetDependenciesViewer"]
 	path = UniGame.AssetDependenciesViewer
 	url = ../UniGame.AssetDependenciesViewer.git
+[submodule "UniGame.AtlasGenerator"]
+	path = UniGame.AtlasGenerator
+	url = git@github.com:UnioGame/UniGame.AtlasGenerator.git
