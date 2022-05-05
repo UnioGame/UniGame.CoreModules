@@ -48,6 +48,3 @@
 [submodule "UniGame.AtlasGenerator"]
 	path = UniGame.AtlasGenerator
 	url = git@github.com:UnioGame/UniGame.AtlasGenerator.git
-[submodule "UniGame.PsbDeconstructor"]
-	path = UniGame.PsbDeconstructor
-	url = git@github.com:UnioGame/UniGame.PsbDeconstructor.git
