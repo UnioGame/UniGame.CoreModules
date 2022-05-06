@@ -33,7 +33,7 @@ namespace UniRx.Examples
             // UniRx expands SelectMany(IEnumerator) as SelectMany(IEnumerator.ToObservable())
             var cancel = Observable.FromCoroutine(AsyncA)
                 .SelectMany(AsyncB)
-                .Subscribe();
+                .RxSubscribe();
 
             // If you want to stop Coroutine(as cancel), call subscription.Dispose()
             // cancel.Dispose();

@@ -53,7 +53,7 @@ namespace UniModules.UniGame.UiElements.Editor.Windows
             _lifeTimeDefinition.Release();
             UiElementFactory.
                 Ready.
-                Subscribe(x => UpdateView()).
+                RxSubscribe(x => UpdateView()).
                 AddTo(_lifeTimeDefinition);
         }
 

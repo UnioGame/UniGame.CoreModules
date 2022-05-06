@@ -32,7 +32,7 @@ namespace UniRx.Examples
 
             // add to reactive collection
             submit.Where(x => x != "")
-                  .Subscribe(x =>
+                  .RxSubscribe(x =>
                   {
                       ToDoInput.text = ""; // clear input field
                       var item = Instantiate(SampleItemPrefab) as GameObject;
@@ -41,19 +41,19 @@ namespace UniRx.Examples
                   });
 
             // Collection Change Handling
-            toDos.ObserveCountChanged().Subscribe(x => Title.text = "TODO App, ItemCount:" + x);
-            toDos.ObserveAdd().Subscribe(x =>
+            toDos.ObserveCountChanged().RxSubscribe(x => Title.text = "TODO App, ItemCount:" + x);
+            toDos.ObserveAdd().RxSubscribe(x =>
             {
                 x.Value.transform.SetParent(TodoList.transform, false);
             });
-            toDos.ObserveRemove().Subscribe(x =>
+            toDos.ObserveRemove().RxSubscribe(x =>
             {
                 GameObject.Destroy(x.Value);
             });
 
             // Clear
             ClearButton.OnClickAsObservable()
-                .Subscribe(_ =>
+                .RxSubscribe(_ =>
                 {
                     var removeTargets = toDos.Where(x => x.GetComponent<Toggle>().isOn).ToArray();
                     foreach (var item in removeTargets)

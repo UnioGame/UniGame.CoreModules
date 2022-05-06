@@ -162,7 +162,7 @@ namespace UniRx.Toolkit
         {
             return Observable.Interval(checkInterval)
                 .TakeWhile(_ => !isDisposed)
-                .Subscribe(_ =>
+                .RxSubscribe(_ =>
                 {
                     Shrink(instanceCountRatio, minSize, callOnBeforeRent);
                 });
@@ -375,7 +375,7 @@ namespace UniRx.Toolkit
         {
             return Observable.Interval(checkInterval)
                 .TakeWhile(_ => !isDisposed)
-                .Subscribe(_ =>
+                .RxSubscribe(_ =>
                 {
                     Shrink(instanceCountRatio, minSize, callOnBeforeRent);
                 });

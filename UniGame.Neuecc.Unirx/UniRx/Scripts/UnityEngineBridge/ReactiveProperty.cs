@@ -514,7 +514,7 @@ namespace UniRx
             {
                 // Skip first value
                 var isFirstValue = true;
-                disposable.Disposable = source.Subscribe(x =>
+                disposable.Disposable = source.RxSubscribe(x =>
                 {
                     if (isFirstValue)
                     {
@@ -530,7 +530,7 @@ namespace UniRx
             }
             else
             {
-                disposable.Disposable = source.Subscribe(x =>
+                disposable.Disposable = source.RxSubscribe(x =>
                 {
                     disposable.Dispose(); // finish subscription.
                     tcs.TrySetResult(x);

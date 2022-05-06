@@ -229,7 +229,7 @@ namespace UniRx
                     try
                     {
                         var asyncState = a[0].Invoke(parameter) ?? Observable.ReturnUnit();
-                        return asyncState.Finally(() => canExecuteSource.Value = true).Subscribe();
+                        return asyncState.Finally(() => canExecuteSource.Value = true).RxSubscribe();
                     }
                     catch
                     {
@@ -253,7 +253,7 @@ namespace UniRx
                         throw;
                     }
 
-                    return Observable.WhenAll(xs).Finally(() => canExecuteSource.Value = true).Subscribe();
+                    return Observable.WhenAll(xs).Finally(() => canExecuteSource.Value = true).RxSubscribe();
                 }
             }
             else
@@ -338,7 +338,7 @@ namespace UniRx
             var tcs = new CancellableTaskCompletionSource<T>();
 
             var disposable = new SingleAssignmentDisposable();
-            disposable.Disposable = source.Subscribe(x =>
+            disposable.Disposable = source.RxSubscribe(x =>
             {
                 disposable.Dispose(); // finish subscription.
                 tcs.TrySetResult(x);
@@ -378,7 +378,7 @@ namespace UniRx
         {
             var d1 = command.CanExecute.SubscribeToInteractable(button);
             var d2 = button.OnClickAsObservable().SubscribeWithState(command, (x, c) => c.Execute(x));
-            var d3 = command.Subscribe(onClick);
+            var d3 = command.RxSubscribe(onClick);
 
             return StableCompositeDisposable.Create(d1, d2, d3);
         }

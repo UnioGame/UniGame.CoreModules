@@ -15,7 +15,7 @@ namespace UniRx.Examples
             cube.AddComponent<ObservableUpdateTrigger>()
                 .UpdateAsObservable()
                 .SampleFrame(30)
-                .Subscribe(x => Debug.Log("cube"), () => Debug.Log("destroy"));
+                .RxSubscribe(x => Debug.Log("cube"), () => Debug.Log("destroy"));
 
             // destroy after 3 second:)
             GameObject.Destroy(cube, 3f);

@@ -16,7 +16,7 @@ namespace UniRx.Examples
             // Basic: Download from google.
             {
                 ObservableWWW.Get("http://google.co.jp/")
-                    .Subscribe(
+                    .RxSubscribe(
                         x => Debug.Log(x.Substring(0, 100)), // onSuccess
                         ex => Debug.LogException(ex)); // onError
             }
@@ -28,7 +28,7 @@ namespace UniRx.Examples
                             from bing in ObservableWWW.Get("http://bing.com/")
                             select new { google, bing };
 
-                var cancel = query.Subscribe(x => Debug.Log(x.google.Substring(0, 100) + ":" + x.bing.Substring(0, 100)));
+                var cancel = query.RxSubscribe(x => Debug.Log(x.google.Substring(0, 100) + ":" + x.bing.Substring(0, 100)));
 
                 // Call Dispose is cancel downloading.
                 cancel.Dispose();
@@ -42,7 +42,7 @@ namespace UniRx.Examples
                     ObservableWWW.Get("http://bing.com/"),
                     ObservableWWW.Get("http://unity3d.com/"));
 
-                parallel.Subscribe(xs =>
+                parallel.RxSubscribe(xs =>
                 {
                     Debug.Log(xs[0].Substring(0, 100)); // google
                     Debug.Log(xs[1].Substring(0, 100)); // bing
@@ -54,10 +54,10 @@ namespace UniRx.Examples
             {
                 // notifier for progress
                 var progressNotifier = new ScheduledNotifier<float>();
-                progressNotifier.Subscribe(x => Debug.Log(x)); // write www.progress
+                progressNotifier.RxSubscribe(x => Debug.Log(x)); // write www.progress
 
                 // pass notifier to WWW.Get/Post
-                ObservableWWW.Get("http://google.com/", progress: progressNotifier).Subscribe();
+                ObservableWWW.Get("http://google.com/", progress: progressNotifier).RxSubscribe();
             }
 
             // with Error
@@ -77,7 +77,7 @@ namespace UniRx.Examples
                             Debug.Log(item.Key + ":" + item.Value);
                         }
                     })
-                    .Subscribe();
+                    .RxSubscribe();
             }
         }
     }

@@ -17,7 +17,7 @@ namespace UniRx.Examples
             // StartCoroutine is Unity primitive way and it's awaitable by yield return.
             // FromCoroutine is Rx, it's composable and cancellable by subscription's IDisposable.
             // FromCoroutine's overload can have return value, see:Sample05_ConvertFromCoroutine
-            Observable.FromCoroutine(TestAsync).Subscribe();
+            Observable.FromCoroutine(TestAsync).RxSubscribe();
 
             // Add Action to MainThreadDispatcher. Action is saved queue, run on next update.
             MainThreadDispatcher.Post(_ => Debug.Log("test"), null);
@@ -25,13 +25,13 @@ namespace UniRx.Examples
             // Timebased operations is run on MainThread(as default)
             // All timebased operation(Interval, Timer, Delay, Buffer, etc...)is single thread, thread safe!
             Observable.Interval(TimeSpan.FromSeconds(1))
-                .Subscribe(x => Debug.Log(x));
+                .RxSubscribe(x => Debug.Log(x));
 
             // Observable.Start use ThreadPool Scheduler as default.
             // ObserveOnMainThread return to mainthread
             Observable.Start(() => Unit.Default) // asynchronous work
                 .ObserveOnMainThread()
-                .Subscribe(x => Debug.Log(x));
+                .RxSubscribe(x => Debug.Log(x));
         }
 
         IEnumerator TestAsync()

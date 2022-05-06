@@ -28,19 +28,19 @@ namespace UniRx.Examples
             // convert to IO<EventPattern> as (sender, eventArgs)
             Observable.FromEventPattern<EventHandler<MyEventArgs>, MyEventArgs>(
                     h => h.Invoke, h => FooBar += h, h => FooBar -= h)
-                .Subscribe()
+                .RxSubscribe()
                 .AddTo(disposables); // IDisposable can add to collection easily by AddTo
 
             // convert to IO<EventArgs>, many situation this is useful than FromEventPattern
             Observable.FromEvent<EventHandler<MyEventArgs>, MyEventArgs>(
                     h => (sender, e) => h(e), h => FooBar += h, h => FooBar -= h)
-                .Subscribe()
+                .RxSubscribe()
                 .AddTo(disposables);
 
             // You can convert Action like event.
             Observable.FromEvent<int>(
                     h => FooFoo += h, h => FooFoo -= h)
-                .Subscribe()
+                .RxSubscribe()
                 .AddTo(disposables);
 
             // AOT Safe EventHandling, use dummy capture, see:https://github.com/neuecc/UniRx/wiki/AOT-Exception-Patterns-and-Hacks
@@ -50,11 +50,11 @@ namespace UniRx.Examples
                     capture.GetHashCode(); // dummy for AOT
                     return new EventHandler<MyEventArgs>(h);
                 }, h => FooBar += h, h => FooBar -= h)
-                .Subscribe()
+                .RxSubscribe()
                 .AddTo(disposables);
 
             // Subject as like event.
-            OnBarBar.Subscribe().AddTo(disposables);
+            OnBarBar.RxSubscribe().AddTo(disposables);
             onBarBar.OnNext(1); // fire event
         }
 
