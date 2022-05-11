@@ -414,10 +414,10 @@ namespace UniRx
             return source.Subscribe(Observer.CreateSubscribeObserver(onNext, Stubs.Throw, Stubs.Nop));
         }
 
-        // public static IDisposable RxSubscribe<T>(this IObservable<T> source, Action onNext)
-        // {
-        //     return source.RxSubscribe(x => onNext());
-        // }
+        public static IDisposable RxSubscribe<T>(this IObservable<T> source, Action onNext)
+        {
+            return source.RxSubscribe(x => onNext());
+        }
         
         public static IDisposable RxSubscribe<T>(this IObservable<T> source, Action<T> onNext, Action<Exception> onError)
         {
