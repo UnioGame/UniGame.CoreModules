@@ -22,7 +22,7 @@ namespace UniRx.Examples
             // (make custom sink(IObserver<EventEntry>) is better to use)
             ObservableLogger.Listener
                 .Where(x => x.LogType == LogType.Exception)
-                .RxSubscribe(x =>
+                .Subscribe(x =>
                 {
                     // ObservableWWW.Post("", null).Subscribe();
                 });

@@ -26,7 +26,7 @@ namespace UniRx.Examples
 
             clickStream.Buffer(clickStream.Throttle(TimeSpan.FromMilliseconds(250)))
                 .Where(xs => xs.Count >= 2)
-                .RxSubscribe(xs => Debug.Log("DoubleClick Detected! Count:" + xs.Count));
+                .Subscribe(xs => Debug.Log("DoubleClick Detected! Count:" + xs.Count));
         }
     }
 }

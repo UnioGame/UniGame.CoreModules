@@ -125,7 +125,7 @@ namespace UniRx
             // - CancellationTokenRegistration is a struct
             // - Registration will succeed 99% of the time, no warranting an attempt to avoid spurious Subscribe calls
             //
-            subject.RxSubscribe(Stubs<T>.Ignore, _ => ctr.Dispose(), ctr.Dispose);
+            subject.Subscribe(Stubs<T>.Ignore, _ => ctr.Dispose(), ctr.Dispose);
         }
     }
 }
