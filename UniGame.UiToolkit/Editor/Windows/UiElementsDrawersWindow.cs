@@ -7,11 +7,9 @@ namespace UniModules.UniGame.UiElements.Editor.Windows
     using System;
     using System.Collections.Generic;
     using UniModules.Editor;
-    using global::UniGame.Core.EditorTools.Editor.UiElements;
     using Sirenix.OdinInspector;
     using TypeDrawers;
     using UniModules.UniCore.Runtime.DataFlow;
-    using UniModules.UniCore.Runtime.Rx.Extensions;
     using UniRx;
     using UnityEditor;
     using UnityEngine;
