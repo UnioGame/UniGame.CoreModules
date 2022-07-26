@@ -34,10 +34,6 @@
 	path = UniGame.AddressablesImporter/unity-addressable-importer
 	url = https://github.com/UniGameTeam/unity-addressable-importer.git
 	branch = master
-[submodule "UniGame.GraphicsTools"]
-	path = UniGame.GraphicsTools
-	url = https://github.com/UniGameTeam/UniGame.GraphicsTools
-	branch = master
 [submodule "UniGame.Core"]
 	path = UniGame.Core
 	url = https://github.com/UniGameTeam/UniGame.Core.git
