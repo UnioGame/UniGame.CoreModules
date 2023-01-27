@@ -26,10 +26,6 @@
 	path = UniGame.AddressableTools
 	url = https://github.com/UniGameTeam/UniGame.AddressableTools.git
 	branch = main
-[submodule "UniGame.SceneAssets"]
-	path = UniGame.SceneAssets
-	url = https://github.com/UniGameTeam/UniGame.SceneAssets.git
-	branch = main
 [submodule "UniGame.AddressablesImporter/unity-addressable-importer"]
 	path = UniGame.AddressablesImporter/unity-addressable-importer
 	url = https://github.com/UniGameTeam/unity-addressable-importer.git
