@@ -37,33 +37,36 @@ namespace UniRx
         static ScenePlaybackDetector()
         {
             IsPlaying = EditorApplication.isPlaying;
-            
-            EditorApplication.playModeStateChanged += e =>
+            EditorApplication.playModeStateChanged -= OnPlaymodeStateChanged;
+            EditorApplication.playModeStateChanged += OnPlaymodeStateChanged;
+        }
+
+        private static void OnPlaymodeStateChanged(PlayModeStateChange e)
+        {
+            switch (e)
             {
-                switch (e)
-                {
-                    case PlayModeStateChange.EnteredEditMode:
-                    case PlayModeStateChange.ExitingEditMode:
-                    case PlayModeStateChange.ExitingPlayMode:
-                        IsPlaying = false;
-                        break;
-                    case PlayModeStateChange.EnteredPlayMode:
-                        IsPlaying = true;
-                        break;
-                }
-                // Before scene start:          isPlayingOrWillChangePlaymode = false;  isPlaying = false
-                // Pressed Playback button:     isPlayingOrWillChangePlaymode = true;   isPlaying = false
-                // Playing:                     isPlayingOrWillChangePlaymode = false;  isPlaying = true
-                // Pressed stop button:         isPlayingOrWillChangePlaymode = true;   isPlaying = true
-                if (EditorApplication.isPlayingOrWillChangePlaymode && !EditorApplication.isPlaying)
-                {
-                    AboutToStartScene = true;
-                }
-                else
-                {
-                    AboutToStartScene = false;
-                }
-            };
+                case PlayModeStateChange.EnteredEditMode:
+                case PlayModeStateChange.ExitingEditMode:
+                case PlayModeStateChange.ExitingPlayMode:
+                    IsPlaying = false;
+                    break;
+                case PlayModeStateChange.EnteredPlayMode:
+                    IsPlaying = true;
+                    break;
+            }
+            
+            // Before scene start:          isPlayingOrWillChangePlaymode = false;  isPlaying = false
+            // Pressed Playback button:     isPlayingOrWillChangePlaymode = true;   isPlaying = false
+            // Playing:                     isPlayingOrWillChangePlaymode = false;  isPlaying = true
+            // Pressed stop button:         isPlayingOrWillChangePlaymode = true;   isPlaying = true
+            if (EditorApplication.isPlayingOrWillChangePlaymode && !EditorApplication.isPlaying)
+            {
+                AboutToStartScene = true;
+            }
+            else
+            {
+                AboutToStartScene = false;
+            }
         }
     }
 }
