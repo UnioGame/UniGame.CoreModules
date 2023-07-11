@@ -8,10 +8,32 @@ namespace UniGame.DoTween.Runtime.Extensions
 
     public static class DoTweenExtension
     {
-        public static TTween AddTo<TTween>(this TTween tween, ILifeTime lifeTime)
+        public static TTween AddTo<TTween>(this TTween tween, ILifeTime lifeTime,bool rewind = false)
             where  TTween : Tween
         {
-            lifeTime.AddCleanUpAction(() => tween.Kill());
+            lifeTime.AddCleanUpAction(() =>
+            {
+                if (rewind)
+                {
+                    tween.Rewind();
+                    tween.Complete();
+                }
+                tween.Kill();
+            });
+            return tween;
+        }
+        
+        public static Sequence AddTo(this Sequence tween, ILifeTime lifeTime,bool rewind = false)
+        {
+            lifeTime.AddCleanUpAction(() =>
+            {
+                if (rewind)
+                {
+                    tween.Rewind();
+                    tween.Complete();
+                }
+                tween.Kill();
+            });
             return tween;
         }
         
