@@ -151,9 +151,7 @@ namespace UniGame.Core.EditorTools.Editor.UiElements
 		{
 			if (typeof(Enum).IsAssignableFrom(fieldType))
 				fieldType = typeof(Enum);
-			
 			var createFieldSpecificMethod = createFieldMethod.MakeGenericMethod(fieldType);
-
 			return createFieldSpecificMethod.Invoke(null, new object[]{value, onValueChanged, label}) as VisualElement;
 		}
 	}
