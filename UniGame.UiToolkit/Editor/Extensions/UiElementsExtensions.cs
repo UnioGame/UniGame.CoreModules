@@ -4,7 +4,7 @@ using System.Linq;
 using UniModules.Editor;
 using UniModules.UniCore.Runtime.ReflectionUtils;
 using UniGame.Core.Runtime.SerializableType.Editor.SerializableTypeEditor;
-using UniModules.UniGame.CoreModules.UniGame.Core.Editor.SerializableTypeEditor;
+using UniGame.CoreModules.Editor.SerializableTypeEditor;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
