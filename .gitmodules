@@ -2,10 +2,6 @@
 	path = UniGame.Context
 	url = https://github.com/UniGameTeam/UniGame.Context.git
 	branch = main
-[submodule "UniGame.Routines"]
-	path = UniGame.Routines
-	url = https://github.com/UniGameTeam/UniGame.Routines.git
-	branch = master
 [submodule "UniGame.Rx"]
 	path = UniGame.Rx
 	url = https://github.com/UniGameTeam/UniGame.Rx.git
@@ -26,14 +22,7 @@
 	path = UniGame.AddressableTools
 	url = https://github.com/UniGameTeam/UniGame.AddressableTools.git
 	branch = main
-[submodule "UniGame.AddressablesImporter/unity-addressable-importer"]
-	path = UniGame.AddressablesImporter/unity-addressable-importer
-	url = https://github.com/UniGameTeam/unity-addressable-importer.git
-	branch = master
 [submodule "UniGame.Core"]
 	path = UniGame.Core
 	url = https://github.com/UniGameTeam/UniGame.Core.git
 	branch = main
-[submodule "UniGame.AssetDependenciesViewer"]
-	path = UniGame.AssetDependenciesViewer
-	url = ../UniGame.AssetDependenciesViewer.git
