@@ -19,31 +19,16 @@
 
 ## How to Install
 
-Add to your project manifiest by path [%UnityProject%]/Packages/manifiest.json new Scope:
+Add to your project manifiest by path [%UnityProject%]/Packages/manifiest.json new dependency:
 
 ```json
 {
-  "scopedRegistries": [
-    {
-      "name": "UniGame",
-      "url": "http://package.unigame.pro:4873/",
-      "scopes": [
-        "com.unigame",
-        "com.littlebigfun",
-        "com.alelievr"
-      ]
-    },
-    
-    "__comment":"another scoped registers",
-    
-  ],
+  "dependencies": {
+    "com.unigame.coremodules": "https://github.com/UnioGame/UniGame.CoreModules.git",
+  }
 }
 
 ```
-
-Now install via Package Manager
-
-![](https://github.com/UniGameTeam/UniGame.CoreModules/blob/master/Readme/Assets/package_install.png)
 
 ### Additional helpful registers
 
