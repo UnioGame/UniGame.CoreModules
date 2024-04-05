@@ -30,40 +30,6 @@ Add to your project manifiest by path [%UnityProject%]/Packages/manifiest.json n
 
 ```
 
-### Additional helpful registers
-
-- Open UPM Register
-
-```json
-    {
-      "name": "package.openupm.com",
-      "url": "https://package.openupm.com",
-      "scopes": [
-        "com.coffee",
-        "com.coffee.ui-particle",
-        "com.coffee.ui-effect",
-        "com.littlebigfun.addressable-importer",
-        "com.yasirkula",
-        "com.yasirkula.assetusagedetector",
-        "com.openupm"
-      ]
-    },
- 
-```
-- Google Packages
-
-```json
-    {
-      "name": "Game Package Registry by Google",
-      "url": "https://unityregistry-pa.googleapis.com",
-      "scopes": [
-        "com.google"
-      ]
-    },
-    
-```
-
-
 # Modules
 
 ## LifeTime
