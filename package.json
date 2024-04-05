@@ -22,7 +22,7 @@
     "com.unity.textmeshpro": "3.0.8",
     "com.unity.ugui": "1.0.0",
     "com.unity.editorcoroutines": "1.0.0",
-    "com.unigame.newtonsoft.json-for-unity": "2022.0.1",
+    "com.unity.nuget.newtonsoft-json": "3.0.2",
     "com.unity.2d.psdimporter": "6.0.4",
     "com.unity.2d.common": "6.0.3"
   }
