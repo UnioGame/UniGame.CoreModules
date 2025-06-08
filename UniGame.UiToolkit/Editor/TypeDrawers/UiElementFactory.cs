@@ -7,10 +7,11 @@
     using global::UniGame.Core.EditorTools.Editor.UiElements;
     using global::UniGame.Core.Runtime.Attributes.FieldTypeDrawer;
     using global::UniGame.UiElements.Runtime.Attributes;
-    using UniModules.UniCore.Runtime.ReflectionUtils;
-    using UniModules.UniCore.Runtime.Utils;
-    using UniModules.UniGame.Core.Runtime.Attributes.FieldTypeDrawer;
-    using UniRx;
+    using R3;
+    using global::UniGame.Runtime.ReflectionUtils;
+    using global::UniGame.Runtime.Utils;
+    using global::UniGame.Attributes.FieldTypeDrawer;
+     
     using UnityEditor;
     using UnityEditor.UIElements;
     using UnityEngine;
@@ -20,7 +21,7 @@
     public static class UiElementFactory 
     {
         private static List<Attribute>              _attributes = new List<Attribute>();
-        private static BoolReactiveProperty         ready       = new BoolReactiveProperty();
+        private static ReactiveProperty<bool> ready       = new ReactiveProperty<bool>(false);
         private static List<IUiElementsTypeDrawer>  drawers;
         private static List<IUiElementsFieldDrawer> fieldDrawers;
         
@@ -30,7 +31,7 @@
 
         public static IReadOnlyList<IUiElementsTypeDrawer> Drawers => drawers;
         public static IReadOnlyList<IUiElementsFieldDrawer> FieldDrawers => fieldDrawers;
-        public static IReadOnlyReactiveProperty<bool> Ready => ready;
+        public static ReadOnlyReactiveProperty<bool> Ready => ready;
         
         private static Func<Type, IUiElementsTypeDrawer> GetDrawer =
             MemorizeTool.Create<Type,IUiElementsTypeDrawer>((type => {
@@ -72,7 +73,7 @@
         {
             LoadDrawers();
             LoadFieldInfoDrawers();
-            ready.SetValueAndForceNotify(true);
+            ready.Value = true;
         }
         
         public static VisualElement CachedDrawer(

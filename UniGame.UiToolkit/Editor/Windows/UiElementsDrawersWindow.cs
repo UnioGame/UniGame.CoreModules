@@ -2,15 +2,16 @@
 
 using Sirenix.OdinInspector.Editor;
 
-namespace UniModules.UniGame.UiElements.Editor.Windows
+namespace UniGame.UiElements.Editor
 {
     using System;
     using System.Collections.Generic;
+    using R3;
     using UniModules.Editor;
     using Sirenix.OdinInspector;
     using TypeDrawers;
-    using UniModules.UniCore.Runtime.DataFlow;
-    using UniRx;
+    using UniGame.Runtime.DataFlow;
+    using UniModules.UniGame.UiElements.Editor.TypeDrawers;
     using UnityEditor;
     using UnityEngine;
 
@@ -51,11 +52,11 @@ namespace UniModules.UniGame.UiElements.Editor.Windows
             _lifeTimeDefinition.Release();
             UiElementFactory.
                 Ready.
-                Subscribe(x => UpdateView()).
+                Subscribe(UpdateView).
                 AddTo(_lifeTimeDefinition);
         }
 
-        private void UpdateView()
+        private void UpdateView(bool ready)
         {
             foreach (var drawer in UiElementFactory.Drawers) {
                 var type = drawer.GetType();

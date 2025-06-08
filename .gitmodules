@@ -14,10 +14,6 @@
 	path = UniGame.EditorTools
 	url = https://github.com/UniGameTeam/UniGame.EditorTools.git
 	branch = master
-[submodule "UniGame.CodeWriter"]
-	path = UniGame.CodeWriter
-	url = https://github.com/UniGameTeam/UniGame.CodeWriter.git
-	branch = master
 [submodule "UniGame.AddressableTools"]
 	path = UniGame.AddressableTools
 	url = https://github.com/UniGameTeam/UniGame.AddressableTools.git

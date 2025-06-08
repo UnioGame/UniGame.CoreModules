@@ -1,7 +1,7 @@
 ﻿namespace UniModules.UniGame.UiToolkit.Runtime.Styles
 {
     using System;
-    using Core.Runtime.DataStructure;
+    using global::UniGame.DataStructure;
     using UnityEngine.UIElements;
 
     [Serializable]

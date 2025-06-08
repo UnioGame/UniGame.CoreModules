@@ -10,8 +10,8 @@ using UnityEngine.UIElements;
 namespace UniGame.Core.EditorTools.Editor.UiElements
 {
 	using Runtime.ReflectionUtils;
-	using UniModules.UniCore.Runtime.ReflectionUtils;
-	using UniModules.UniGame.Core.Runtime.Attributes.FieldTypeDrawer;
+	using UniGame.Runtime.ReflectionUtils;
+	using UniGame.Attributes.FieldTypeDrawer;
 
 	public static class FieldFactory
 	{
