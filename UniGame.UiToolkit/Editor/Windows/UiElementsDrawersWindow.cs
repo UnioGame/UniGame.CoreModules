@@ -39,7 +39,7 @@ namespace UniGame.UiElements.Editor
             window.Show();
         }
         
-        private LifeTimeDefinition _lifeTimeDefinition = new LifeTimeDefinition();
+        private LifeTime _lifeTimeDefinition = new LifeTime();
         
         [SerializeField]
         private List<DrawerItemInfo> _drawers = new List<DrawerItemInfo>();
