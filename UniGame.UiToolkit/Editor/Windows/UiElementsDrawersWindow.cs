@@ -49,7 +49,8 @@ namespace UniGame.UiElements.Editor
         
         public void InitializeWindow()
         {
-            _lifeTimeDefinition.Release();
+            _lifeTimeDefinition.Restart();
+            
             UiElementFactory.
                 Ready.
                 Subscribe(UpdateView).
